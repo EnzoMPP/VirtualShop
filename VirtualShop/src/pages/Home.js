@@ -1,13 +1,15 @@
-
 import { useEffect, useState } from "react";
 import productService from "../services/productService";
 import saleService from "../services/saleService"; 
 import userService from "../services/userService"; 
+import PurchaseModal from "../components/layout/PurchaseModal";
 import "../styles/Home.css"; 
 
 const Home = () => {
   const [produtos, setProdutos] = useState([]);
   const [perfil, setPerfil] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -39,34 +41,45 @@ const Home = () => {
     }
   }, [token]);
 
-  const handleComprar = async (produtoId) => {
+  const handleShowModal = (produto) => {
+    setSelectedProduct(produto);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedProduct(null);
+  };
+
+  const handlePurchase = async (quantidade) => {
     if (!perfil) {
       alert("Usuário não autenticado.");
       return;
     }
-  
-    
+
     const userId = perfil.id;
     if (!userId) {
       alert("ID de usuário inválido.");
       return;
     }
-  
+
     console.log("UserId para venda:", userId); 
-  
+
     const saleRequest = {
       Sale: {
         DataVenda: new Date(),
         UserId: userId, 
       },
-      ProductIds: [produtoId],
+      ProductIds: [selectedProduct.id],
       Quantidades: [1],
     };
-  
+
     try {
-      const venda = await saleService.registerSale(saleRequest, token);
+      for (let i = 0; i < quantidade; i++) {
+        const venda = await saleService.registerSale(saleRequest, token);
+        console.log("Venda registrada:", venda);
+      }
       alert("Compra realizada com sucesso!");
-      console.log("Venda registrada:", venda);
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
       if (error.response && error.response.data) {
@@ -92,7 +105,7 @@ const Home = () => {
                   <p className="card-text">Preço: R${produto.preco}</p>
                   <button
                     className="btn btn-primary mt-auto"
-                    onClick={() => handleComprar(produto.id)}
+                    onClick={() => handleShowModal(produto)}
                   >
                     Comprar
                   </button>
@@ -104,6 +117,13 @@ const Home = () => {
           <p>Nenhum produto encontrado.</p>
         )}
       </div>
+
+      {/* Modal de Compra */}
+      <PurchaseModal
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        handlePurchase={handlePurchase}
+      />
     </div>
   );
 };
