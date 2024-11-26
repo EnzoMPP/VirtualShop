@@ -27,7 +27,7 @@ namespace VirtualShopMinimalAPI.Services
 
             var sale = new Sale
             {
-                DataVenda = saleRequest.Sale.DataVenda,
+                DataVenda = DateTime.Now,
                 UserId = saleRequest.Sale.UserId,
                 SaleProducts = new List<SaleProduct>()
             };

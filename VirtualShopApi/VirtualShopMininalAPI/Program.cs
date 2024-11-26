@@ -247,10 +247,24 @@ app.MapGet("/api/auth/google-callback", async (HttpContext context, AppDbContext
     var token = tokenHandler.CreateToken(tokenDescriptor);
     var tokenString = tokenHandler.WriteToken(token);
 
-    // Redirecionar para a página de login com o token como parâmetro
     var redirectUrl = $"http://localhost:3000/login?token={tokenString}";
     return Results.Redirect(redirectUrl);
 })
 .WithName("GoogleCallback");
+
+app.MapGet("/api/User/purchased-products", async (HttpContext http, IUserService userService) =>
+{
+    var email = http.User.FindFirstValue(ClaimTypes.Email);
+    if (string.IsNullOrEmpty(email))
+    {
+        return Results.Unauthorized();
+    }
+
+    return await userService.GetPurchasedProducts(email);
+})
+.WithName("GetPurchasedProducts")
+.WithTags("Usuários")
+.RequireAuthorization();
+
 
 app.Run();

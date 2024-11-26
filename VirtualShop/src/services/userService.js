@@ -1,3 +1,4 @@
+// src/services/userService.js
 import axios from "axios";
 
 const baseURL = "http://localhost:5000/api/User";
@@ -19,6 +20,15 @@ const userService = {
     });
     return response.data;
   },
+  getPurchasedProducts: async (token) => {
+    const response = await axios.get(`${baseURL}/purchased-products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  },
 };
+
 
 export default userService;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../services/userService";
 
+
 const Cadastro = () => {
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");

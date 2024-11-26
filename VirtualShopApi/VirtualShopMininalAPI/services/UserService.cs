@@ -1,11 +1,13 @@
+// Services/UserService.cs
+using Microsoft.EntityFrameworkCore;
 using VirtualShopMinimalAPI.Data;
 using VirtualShopMinimalAPI.Models;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace VirtualShopMinimalAPI.Services
 {
@@ -111,7 +113,7 @@ namespace VirtualShopMinimalAPI.Services
                 return Results.NotFound("Usuário não encontrado.");
             }
 
-            return Results.Ok(new { user.NomeUsuario, user.Email, user.Cpf, user.IsAdmin });
+             return Results.Ok(new { user.Id, user.NomeUsuario, user.Email, user.Cpf, user.IsAdmin });
         }
 
         public async Task<IResult> UpdateUserProfile(string email, User updatedUser)
@@ -151,6 +153,30 @@ namespace VirtualShopMinimalAPI.Services
             _db.Users.Add(admin);
             await _db.SaveChangesAsync();
             return Results.Ok(admin);
+        }
+
+        // Novo método para obter produtos comprados pelo usuário
+        public async Task<IResult> GetPurchasedProducts(string email)
+        {
+            var user = await _db.Users
+                .Include(u => u.Sales)
+                    .ThenInclude(s => s.SaleProducts)
+                        .ThenInclude(sp => sp.Product)
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                return Results.NotFound("Usuário não encontrado.");
+            }
+
+            var produtosComprados = user.Sales
+                .SelectMany(s => s.SaleProducts)
+                .Select(sp => sp.Product)
+                .Where(p => p != null)
+                .Distinct()
+                .ToList();
+
+            return Results.Ok(produtosComprados);
         }
     }
 }
