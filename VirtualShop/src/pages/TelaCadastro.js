@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../services/userService";
 
-
 const Cadastro = () => {
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -21,6 +20,10 @@ const Cadastro = () => {
       alert(error.response?.data || "Erro ao cadastrar usuário.");
       console.error(error);
     }
+  };
+
+  const handleBackToLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -88,9 +91,12 @@ const Cadastro = () => {
             Cadastrar
           </button>
         </form>
+        <button className="btn btn-secondary w-100 mt-3" onClick={handleBackToLogin}>
+          Voltar para Login
+        </button>
       </div>
     </div>
   );
 };
 
-export default Cadastro;
+export default Cadastro;  
