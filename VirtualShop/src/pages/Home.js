@@ -1,9 +1,9 @@
-// src/pages/Home.js
+
 import { useEffect, useState } from "react";
 import productService from "../services/productService";
-import saleService from "../services/saleService"; // Importar o serviço de venda
-import userService from "../services/userService"; // Importar o serviço de usuário
-import "../styles/Home.css"; // Importar o CSS customizado
+import saleService from "../services/saleService"; 
+import userService from "../services/userService"; 
+import "../styles/Home.css"; 
 
 const Home = () => {
   const [produtos, setProdutos] = useState([]);
@@ -26,7 +26,7 @@ const Home = () => {
       try {
         const data = await userService.getProfile(token);
         setPerfil(data);
-        console.log("Perfil do usuário:", data); // Para depuração
+        console.log("Perfil do usuário:", data); 
       } catch (error) {
         console.error("Erro ao buscar perfil:", error);
         setPerfil(null);
@@ -44,30 +44,29 @@ const Home = () => {
       alert("Usuário não autenticado.");
       return;
     }
-
-    // Extrair o UserId da propriedade $id
-    const userId = parseInt(perfil.$id, 10); // Converter para inteiro
+  
+    
+    const userId = perfil.id;
     if (!userId) {
       alert("ID de usuário inválido.");
       return;
     }
-
-    console.log("UserId para venda:", userId); // Para depuração
-
+  
+    console.log("UserId para venda:", userId); 
+  
     const saleRequest = {
       Sale: {
         DataVenda: new Date(),
-        UserId: userId, // Use a propriedade correta
+        UserId: userId, 
       },
       ProductIds: [produtoId],
-      Quantidades: [1], // Quantidade fixa em 1, pode ser ajustada conforme necessário
+      Quantidades: [1],
     };
-
+  
     try {
       const venda = await saleService.registerSale(saleRequest, token);
       alert("Compra realizada com sucesso!");
       console.log("Venda registrada:", venda);
-      // Opcional: Atualizar a lista de produtos ou perfil após a compra
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
       if (error.response && error.response.data) {

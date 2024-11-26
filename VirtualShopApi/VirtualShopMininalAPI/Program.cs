@@ -15,7 +15,7 @@ using VirtualShopMinimalAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar CORS
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Configuração de serviços
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
@@ -61,7 +61,7 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 })
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme) // Para gerenciamento de cookies
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme) 
 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 {
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
@@ -89,10 +89,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Aplicar CORS antes da autenticação
+
 app.UseCors("AllowAll");
 
-// Definição das rotas
+
 app.MapPost("/api/User/register", async (User user, IUserService userService) =>
 {
     return await userService.RegisterUser(user);
@@ -204,7 +204,7 @@ app.MapGet("/api/auth/google-callback", async (HttpContext context, AppDbContext
         return Results.Unauthorized();
     }
 
-    // Obter dados do usuário autenticado
+    
     var email = result.Principal.FindFirstValue(ClaimTypes.Email);
     var nome = result.Principal.FindFirstValue(ClaimTypes.Name);
 
@@ -213,7 +213,7 @@ app.MapGet("/api/auth/google-callback", async (HttpContext context, AppDbContext
         return Results.BadRequest("Nome e Email são obrigatórios.");
     }
 
-    // Criar ou atualizar o usuário no banco de dados
+    
     var usuarioExistente = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
     if (usuarioExistente == null)
     {
@@ -229,7 +229,7 @@ app.MapGet("/api/auth/google-callback", async (HttpContext context, AppDbContext
         usuarioExistente = novoUsuario;
     }
 
-    // Gerar o token JWT
+    
     var claims = new[]
     {
         new Claim(ClaimTypes.Email, usuarioExistente.Email),
@@ -252,15 +252,9 @@ app.MapGet("/api/auth/google-callback", async (HttpContext context, AppDbContext
 })
 .WithName("GoogleCallback");
 
-app.MapGet("/api/User/purchased-products", async (HttpContext http, IUserService userService) =>
+app.MapGet("/api/User/{id}/purchased-products", async (int id, IUserService userService) =>
 {
-    var email = http.User.FindFirstValue(ClaimTypes.Email);
-    if (string.IsNullOrEmpty(email))
-    {
-        return Results.Unauthorized();
-    }
-
-    return await userService.GetPurchasedProducts(email);
+    return await userService.GetPurchasedProducts(id);
 })
 .WithName("GetPurchasedProducts")
 .WithTags("Usuários")

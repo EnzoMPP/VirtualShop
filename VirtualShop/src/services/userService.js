@@ -1,4 +1,3 @@
-// src/services/userService.js
 import axios from "axios";
 
 const baseURL = "http://localhost:5000/api/User";
@@ -18,17 +17,33 @@ const userService = {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    const profile = response.data;
+    return {
+      id: profile.id,
+      nomeUsuario: profile.nomeUsuario,
+      email: profile.email,
+      cpf: profile.cpf,
+      isAdmin: profile.isAdmin,
+    };
   },
-  getPurchasedProducts: async (token) => {
-    const response = await axios.get(`${baseURL}/purchased-products`, {
+  getPurchasedProducts: async (id, token) => {
+    const response = await axios.get(`${baseURL}/${id}/purchased-products`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
   },
+  addAdmin: async (adminData, token) => {
+    const response = await axios.post(`http://localhost:5000/api/Admin`, adminData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  },
+  
 };
-
 
 export default userService;

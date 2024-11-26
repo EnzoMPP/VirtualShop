@@ -22,7 +22,7 @@ const ProductListItem = ({ product, onDelete, onEdit }) => {
     try {
       await productService.updateProduct(product.id, editedProduct);
       setIsEditing(false);
-      onEdit(); // Atualiza a lista de produtos
+      onEdit(); 
     } catch (error) {
       console.error("Erro ao atualizar produto:", error);
     }

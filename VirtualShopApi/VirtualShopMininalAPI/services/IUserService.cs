@@ -7,6 +7,6 @@ public interface IUserService
     Task<IResult> GetUserProfile(string email);
     Task<IResult> UpdateUserProfile(string email, User updatedUser);
     Task<IResult> AddAdmin(User admin);
-            Task<IResult> GetPurchasedProducts(string email);
+            Task<IResult> GetPurchasedProducts(int userId);
 
 }

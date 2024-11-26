@@ -4,8 +4,8 @@ import productService from "../../services/productService";
 
 const ProductList = ({ onEditProduct }) => {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado para carregar
-  const [error, setError] = useState(null); // Estado para erros
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     fetchProducts();
@@ -14,7 +14,7 @@ const ProductList = ({ onEditProduct }) => {
   const fetchProducts = async () => {
     try {
       const productsData = await productService.getAllProducts();
-      console.log("Produtos recebidos:", productsData); // Debug
+      console.log("Produtos recebidos:", productsData); 
 
       if (Array.isArray(productsData)) {
         setProducts(productsData);
@@ -41,7 +41,7 @@ const ProductList = ({ onEditProduct }) => {
   };
 
   const handleEdit = () => {
-    fetchProducts(); // Atualiza a lista de produtos após a edição
+    fetchProducts(); 
   };
 
   if (isLoading) {

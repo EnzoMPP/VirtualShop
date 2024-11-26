@@ -39,7 +39,6 @@ namespace VirtualShopMinimalAPI.Services
                 return Results.Unauthorized();
             }
 
-            // Obter dados do usuário autenticado
             var email = result.Principal.FindFirstValue(ClaimTypes.Email);
             var nome = result.Principal.FindFirstValue(ClaimTypes.Name);
 
@@ -48,7 +47,6 @@ namespace VirtualShopMinimalAPI.Services
                 return Results.BadRequest("Nome e Email são obrigatórios.");
             }
 
-            // Criar ou atualizar o usuário no banco de dados
             var usuarioExistente = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (usuarioExistente == null)
             {
@@ -64,7 +62,6 @@ namespace VirtualShopMinimalAPI.Services
                 usuarioExistente = novoUsuario;
             }
 
-            // Gerar o token JWT
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, usuarioExistente.Email),
@@ -82,7 +79,6 @@ namespace VirtualShopMinimalAPI.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // Redirecionar para a página principal com o token como parâmetro
             var redirectUrl = $"http://localhost:3000/home?token={tokenString}";
             return Results.Redirect(redirectUrl);
         }

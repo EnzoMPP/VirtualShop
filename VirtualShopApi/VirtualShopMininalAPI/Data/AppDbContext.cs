@@ -31,7 +31,6 @@ namespace VirtualShopMinimalAPI.Data
                 .Property(p => p.ImageUrl)
                 .HasMaxLength(500);
 
-            // Configuração do relacionamento N:N entre Sale e Product
             modelBuilder.Entity<SaleProduct>()
                 .HasKey(sp => new { sp.SaleId, sp.ProductId });
 
@@ -45,7 +44,6 @@ namespace VirtualShopMinimalAPI.Data
                 .WithMany(p => p.SaleProducts)
                 .HasForeignKey(sp => sp.ProductId);
 
-            // Configuração do relacionamento 1:N entre User e Sale
             modelBuilder.Entity<Sale>()
                 .HasOne(s => s.User)
                 .WithMany(u => u.Sales)

@@ -1,4 +1,3 @@
-// Services/UserService.cs
 using Microsoft.EntityFrameworkCore;
 using VirtualShopMinimalAPI.Data;
 using VirtualShopMinimalAPI.Models;
@@ -8,6 +7,8 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using VirtualShopMinimalAPI.DTOs;
+
 
 namespace VirtualShopMinimalAPI.Services
 {
@@ -100,21 +101,30 @@ namespace VirtualShopMinimalAPI.Services
             return Results.Ok(new { Token = tokenString });
         }
 
-        public async Task<IResult> GetUserProfile(string email)
-        {
-            if (_db.Users == null)
-            {
-                return Results.NotFound("Users collection is null.");
-            }
+public async Task<IResult> GetUserProfile(string email)
+{
+    if (_db.Users == null)
+    {
+        return Results.NotFound("Users collection is null.");
+    }
 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return Results.NotFound("Usuário não encontrado.");
-            }
+    var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+    if (user == null)
+    {
+        return Results.NotFound("Usuário não encontrado.");
+    }
 
-             return Results.Ok(new { user.Id, user.NomeUsuario, user.Email, user.Cpf, user.IsAdmin });
-        }
+    var userDto = new UserDto
+    {
+        Id = user.Id,
+        NomeUsuario = user.NomeUsuario,
+        Email = user.Email,
+        Cpf = user.Cpf,
+        IsAdmin = user.IsAdmin
+    };
+
+    return Results.Ok(userDto);
+}
 
         public async Task<IResult> UpdateUserProfile(string email, User updatedUser)
         {
@@ -155,14 +165,13 @@ namespace VirtualShopMinimalAPI.Services
             return Results.Ok(admin);
         }
 
-        // Novo método para obter produtos comprados pelo usuário
-        public async Task<IResult> GetPurchasedProducts(string email)
+        public async Task<IResult> GetPurchasedProducts(int userId)
         {
             var user = await _db.Users
                 .Include(u => u.Sales)
                     .ThenInclude(s => s.SaleProducts)
                         .ThenInclude(sp => sp.Product)
-                .FirstOrDefaultAsync(u => u.Email == email);
+                .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
             {
@@ -171,9 +180,15 @@ namespace VirtualShopMinimalAPI.Services
 
             var produtosComprados = user.Sales
                 .SelectMany(s => s.SaleProducts)
-                .Select(sp => sp.Product)
-                .Where(p => p != null)
-                .Distinct()
+                .Where(sp => sp.Product != null)
+                .SelectMany(sp => Enumerable.Repeat(new ProductDto
+                {
+                    Id = sp.Product.Id,
+                    Nome = sp.Product.Nome,
+                    Preco = sp.Product.Preco,
+                    ImageUrl = sp.Product.ImageUrl,
+                    DataCompra = sp.Sale.DataVenda 
+                }, sp.Quantidade))
                 .ToList();
 
             return Results.Ok(produtosComprados);

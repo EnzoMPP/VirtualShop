@@ -28,14 +28,13 @@ export const Context = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-    // localStorage.setItem('userData', JSON.stringify(response.data));
-    // localStorage.setItem('user', response.headers.authorization);
+
   };
 
   const Logout = () => {
     setUser([]);
     setIsSigned(false);
-    // localStorage.clear();
+    localStorage.clear();
   };
 
   return <APIContext.Provider value={{}}>{children}</APIContext.Provider>;
