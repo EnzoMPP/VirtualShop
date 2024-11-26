@@ -4172,24 +4172,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\enzom\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Gabriel\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\3º Periodo\\FullStack\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\VirtualShopMininalAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Gabriel\\Desktop\\4º PERIODO\\PFS\\trabalhoREPO_NOVO\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\VirtualShopMininalAPI.csproj",
       "projectName": "VirtualShopMininalAPI",
-      "projectPath": "C:\\3º Periodo\\FullStack\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\VirtualShopMininalAPI.csproj",
-      "packagesPath": "C:\\Users\\enzom\\.nuget\\packages\\",
-      "outputPath": "C:\\3º Periodo\\FullStack\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\obj\\",
+      "projectPath": "C:\\Users\\Gabriel\\Desktop\\4º PERIODO\\PFS\\trabalhoREPO_NOVO\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\VirtualShopMininalAPI.csproj",
+      "packagesPath": "C:\\Users\\Gabriel\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Gabriel\\Desktop\\4º PERIODO\\PFS\\trabalhoREPO_NOVO\\VirtualShop\\VirtualShopApi\\VirtualShopMininalAPI\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\enzom\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Gabriel\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4197,7 +4192,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4275,7 +4269,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
